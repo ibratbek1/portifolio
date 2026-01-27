@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="uz" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Kutubxona Katalogi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light mode variables */
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-bg: #f5f7fa;
+            --light-card: #ffffff;
+            --light-text: #333333;
+            --light-border: #e1e5eb;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            
+            /* Animation variables */
+            --animate-speed: 0.5s;
+        }
+        
+        .dark-mode {
+            /* Dark mode variables */
+            --primary-color: #1a1a2e;
+            --secondary-color: #0ea5e9;
+            --accent-color: #f43f5e;
+            --light-bg: #121212;
+            --light-card: #1e293b;
+            --light-text: #e2e8f0;
+            --light-border: #334155;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            transition: var(--transition);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--light-card);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: var(--transition);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            color: var(--secondary-color);
+            font-size: 28px;
+            animation: rotate 10s linear infinite;
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .dark-mode .logo-text {
+            color: var(--light-text);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary-color);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-input {
+            padding: 10px 15px 10px 40px;
+            border-radius: 30px;
+            border: 1px solid var(--light-border);
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            font-size: 14px;
+            width: 220px;
+            transition: var(--transition);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            width: 250px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            background-color: var(--light-bg);
+            border: 1px solid var(--light-border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .theme-icon {
+            font-size: 20px;
+            color: var(--secondary-color);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            opacity: 0;
+            animation: fadeInUp var(--animate-speed) forwards;
+            animation-delay: 0.2s;
+        }
+        
+        .dark-mode .hero-title {
+            color: var(--light-text);
+        }
+        
+        .hero-subtitle {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--light-text);
+            opacity: 0.9;
+            opacity: 0;
+            animation: fadeInUp var(--animate-speed) forwards;
+            animation-delay: 0.4s;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            opacity: 0;
+            animation: fadeInUp var(--animate-speed) forwards;
+            animation-delay: 0.6s;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--light-text);
+            opacity: 0.8;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            padding: 30px 0 60px;
+        }
+        
+        .sidebar {
+            flex: 0 0 250px;
+            background-color: var(--light-card);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            transition: var(--transition);
+        }
+        
+        .filters-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-border);
+        }
+        
+        .dark-mode .filters-title {
+            color: var(--light-text);
+        }
+        
+        .filter-group {
+            margin-bottom: 25px;
+        }
+        
+        .filter-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--light-text);
+        }
+        
+        .filter-select, .filter-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--light-border);
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .filter-select:focus, .filter-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .filter-option {
+            padding: 6px 12px;
+            background-color: var(--light-bg);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--light-border);
+        }
+        
+        .filter-option:hover, .filter-option.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        .content {
+            flex: 1;
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .dark-mode .section-title {
+            color: var(--light-text);
+        }
+        
+        .sort-select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--light-border);
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .book-card {
+            background-color: var(--light-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp var(--animate-speed) forwards;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .book-image {
+            height: 200px;
+            width: 100%;
+            background-color: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-size: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .book-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(231, 76, 60, 0.1) 100%);
+        }
+        
+        .book-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .book-info {
+            padding: 20px;
+        }
+        
+        .book-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            line-height: 1.4;
+        }
+        
+        .dark-mode .book-title {
+            color: var(--light-text);
+        }
+        
+        .book-author {
+            font-size: 14px;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .book-description {
+            font-size: 14px;
+            color: var(--light-text);
+            opacity: 0.8;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            display: -webkit-box;
+            --line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .book-year {
+            font-size: 13px;
+            color: var(--light-text);
+            opacity: 0.7;
+        }
+        
+        .book-status {
+            font-size: 13px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .available {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .borrowed {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 50px;
+        }
+        
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-card);
+            color: var(--light-text);
+            border: 1px solid var(--light-border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .page-btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        .page-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .hero-title {
+                font-size: 38px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-input {
+                width: 180px;
+            }
+            
+            .search-input:focus {
+                width: 200px;
+            }
+            
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 26px;
+            }
+        }
+        
+        /* Animation delays for book cards */
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+        .book-card:nth-child(4) { animation-delay: 0.4s; }
+        .book-card:nth-child(5) { animation-delay: 0.5s; }
+        .book-card:nth-child(6) { animation-delay: 0.6s; }
+        .book-card:nth-child(7) { animation-delay: 0.7s; }
+        .book-card:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+</head>
+<body class="light-mode">
+    <!-- Header Section -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-book-open logo-icon"></i>
+                <h1 class="logo-text">Kutubxona.Katalog</h1>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#" class="nav-link">Bosh Sahifa</a>
+                <a href="#" class="nav-link">Katalog</a>
+                <a href="#" class="nav-link">Yangiliklar</a>
+                <a href="#" class="nav-link">Kontaktlar</a>
+                <a href="#" class="nav-link">Yordam</a>
+            </nav>
+            
+            <div class="header-controls">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Kitob qidirish...">
+                </div>
+                
+                <div class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon theme-icon"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2 class="hero-title">Digital Kutubxona Katalogi</h2>
+            <p class="hero-subtitle">O'zbekistonning eng katta online kutubxona katalogi. 50,000+ kitob, jurnallar, ilmiy maqolalar va boshqa resurslardan foydalaning.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalBooks">50,247</span>
+                    <span class="stat-label">Jami Kitoblar</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="availableBooks">42,156</span>
+                    <span class="stat-label">Mavjud Kitoblar</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="digitalBooks">18,932</span>
+                    <span class="stat-label">Raqamli Kitoblar</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Sidebar with Filters -->
+        <aside class="sidebar">
+            <h3 class="filters-title">Filtrlash</h3>
+            
+            <div class="filter-group">
+                <label class="filter-label">Kategoriya</label>
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">Barchasi</option>
+                    <option value="fiction">Badiiy adabiyot</option>
+                    <option value="science">Ilmiy adabiyot</option>
+                    <option value="history">Tarix</option>
+                    <option value="biography">Tarjimai hol</option>
+                    <option value="technology">Texnologiya</option>
+                    <option value="children">Bolalar adabiyoti</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Mavjudlik</label>
+                <div class="filter-options">
+                    <div class="filter-option active" data-status="all">Hammasi</div>
+                    <div class="filter-option" data-status="available">Mavjud</div>
+                    <div class="filter-option" data-status="borrowed">Ijarada</div>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Nashr yili</label>
+                <div class="filter-options">
+                    <div class="filter-option active" data-year="all">Hammasi</div>
+                    <div class="filter-option" data-year="2020-2024">2020-2024</div>
+                    <div class="filter-option" data-year="2010-2019">2010-2019</div>
+                    <div class="filter-option" data-year="2000-2009">2000-2009</div>
+                    <div class="filter-option" data-year="before2000">2000 yildan oldin</div>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Muallif</label>
+                <input type="text" class="filter-input" id="authorFilter" placeholder="Muallif ismini kiriting...">
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Til</label>
+                <div class="filter-options">
+                    <div class="filter-option active" data-language="all">Hammasi</div>
+                    <div class="filter-option" data-language="uzbek">O'zbekcha</div>
+                    <div class="filter-option" data-language="russian">Ruscha</div>
+                    <div class="filter-option" data-language="english">Inglizcha</div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="content">
+            <div class="content-header">
+                <h2 class="section-title">Kitoblar Katalogi</h2>
+                
+                <select class="sort-select" id="sortSelect">
+                    <option value="newest">Yangi qo'shilgan</option>
+                    <option value="title">Nomi bo'yicha</option>
+                    <option value="author">Muallif bo'yicha</option>
+                    <option value="year">Nashr yili bo'yicha</option>
+                    <option value="popular">Mashhurligi bo'yicha</option>
+                </select>
+            </div>
+            
+            <!-- Books Grid -->
+            <div class="books-grid" id="booksGrid">
+                <!-- Books will be populated by JavaScript -->
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="page-btn"><i class="fas fa-chevron-left"></i></div>
+                <div class="page-btn active">1</div>
+                <div class="page-btn">2</div>
+                <div class="page-btn">3</div>
+                <div class="page-btn">4</div>
+                <div class="page-btn">5</div>
+                <div class="page-btn"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Kutubxona.Katalog</h3>
+                    <p>O'zbekistondagi eng keng kutubxona resurslari bazasi. Bizning maqsadimiz - bilimni hammaga yetkazish.</p>
+                    <div style="margin-top: 15px; display: flex; gap: 15px;">
+                        <i class="fab fa-facebook-f" style="font-size: 18px; cursor: pointer;"></i>
+                        <i class="fab fa-twitter" style="font-size: 18px; cursor: pointer;"></i>
+                        <i class="fab fa-instagram" style="font-size: 18px; cursor: pointer;"></i>
+                        <i class="fab fa-telegram" style="font-size: 18px; cursor: pointer;"></i>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Tez Havolalar</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Bosh Sahifa</a></li>
+                        <li><a href="#">Katalog</a></li>
+                        <li><a href="#">Yangiliklar</a></li>
+                        <li><a href="#">Kitob taklif qilish</a></li>
+                        <li><a href="#">A'zo bo'lish</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Kategoriyalar</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Badiiy adabiyot</a></li>
+                        <li><a href="#">Ilmiy adabiyot</a></li>
+                        <li><a href="#">Darsliklar</a></li>
+                        <li><a href="#">Bolalar adabiyoti</a></li>
+                        <li><a href="#">Tarixiy adabiyot</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Aloqa</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> Toshkent sh., Yunusobod t.</li>
+                        <li><i class="fas fa-phone" style="margin-right: 8px;"></i> +998 71 123 45 67</li>
+                        <li><i class="fas fa-envelope" style="margin-right: 8px;"></i> info@kutubxona.uz</li>
+                        <li><i class="fas fa-clock" style="margin-right: 8px;"></i> Dushanba-Juma: 9:00-18:00</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Kutubxona.Katalog. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Sample book data
+        const books = [
+            {
+                id: 1,
+                title: "O'tkan Kunlar",
+                author: "Abdulla Qodiriy",
+                year: 1926,
+                category: "fiction",
+                description: "O'zbek adabiyotining eng yirik asarlaridan biri. XX asr boshlarida O'zbekistonning ijtimoiy hayotini aks ettiradi.",
+                language: "uzbek",
+                status: "available"
+            },
+            {
+                id: 2,
+                title: "Atom Odatlar",
+                author: "James Clear",
+                year: 2018,
+                category: "science",
+                description: "Yaxshi odatlarni qanday shakllantirish va yomon odatlardan qanday qutulish haqida qimmatli maslahatlar.",
+                language: "english",
+                status: "available"
+            },
+            {
+                id: 3,
+                title: "Dunyoning Qisqa Tarixi",
+                author: "Stephen Hawking",
+                year: 1988,
+                category: "science",
+                description: "Koinotning kelib chiqishi, tabiati va kelajagi haqida Stephen Hawkingning mashhur asari.",
+                language: "russian",
+                status: "borrowed"
+            },
+            {
+                id: 4,
+                title: "Sariq Devning Minoatasi",
+                author: "Xudoyberdi To'xtaboyev",
+                year: 2021,
+                category: "fiction",
+                description: "Zamonaviy o'zbek adabiyotining diqqatga sazovor asari. Yosh avlodning qiyinchiliklari va orzulari haqida.",
+                language: "uzbek",
+                status: "available"
+            },
+            {
+                id: 5,
+                title: "JavaScript: The Definitive Guide",
+                author: "David Flanagan",
+                year: 2020,
+                category: "technology",
+                description: "JavaScript dasturlash tilini chuqur o'rganish uchun eng yaxshi qo'llanmalardan biri.",
+                language: "english",
+                status: "available"
+            },
+            {
+                id: 6,
+                title: "Buyuk O'zbekiston Tarixi",
+                author: "Ahmad Ali Asqarov",
+                year: 2019,
+                category: "history",
+                description: "Qadim zamonlardan hozirgi kungacha O'zbekiston tarixining to'liq yoritilishi.",
+                language: "uzbek",
+                status: "borrowed"
+            },
+            {
+                id: 7,
+                title: "Steve Jobs",
+                author: "Walter Isaacson",
+                year: 2011,
+                category: "biography",
+                description: "Apple kompaniyasining asoschisi Steve Jobsning hayoti va faoliyati haqida hikoya.",
+                language: "russian",
+                status: "available"
+            },
+            {
+                id: 8,
+                title: "Alpomish",
+                author: "Xalq merosi",
+                year: 1995,
+                category: "fiction",
+                description: "O'zbek xalqining qadimiy dostonlaridan biri. Qahramonlik va vatanparvarlik ruhida yozilgan.",
+                language: "uzbek",
+                status: "available"
+            },
+            {
+                id: 9,
+                title: "Sapiens",
+                author: "Yuval Noah Harari",
+                year: 2011,
+                category: "science",
+                description: "Insoniyatning qisqa tarixi. Odam turinging paydo bo'lishidan hozirgi kungacha bo'lgan yo'li.",
+                language: "english",
+                status: "borrowed"
+            },
+            {
+                id: 10,
+                title: "Daftar Hoshiyasidagi Bitiklar",
+                author: "Utkir Hoshimov",
+                year: 2005,
+                category: "fiction",
+                description: "Tanlangan hikoyalar to'plami. Hayotning turli jabhalarini yorqin tasvirlar bilan aks ettiradi.",
+                language: "uzbek",
+                status: "available"
+            },
+            {
+                id: 11,
+                title: "Python for Data Analysis",
+                author: "Wes McKinney",
+                year: 2017,
+                category: "technology",
+                description: "Python yordamida ma'lumotlarni tahlil qilish va vizualizatsiya qilish bo'yicha qo'llanma.",
+                language: "english",
+                status: "available"
+            },
+            {
+                id: 12,
+                title: "Navoiy",
+                author: "Oybek",
+                year: 1945,
+                category: "biography",
+                description: "Buyuk o'zbek shoiri va mutafakkiri Alisher Navoiy hayoti va ijodi haqida roman.",
+                language: "uzbek",
+                status: "borrowed"
+            }
+        ];
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const booksGrid = document.getElementById('booksGrid');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const authorFilter = document.getElementById('authorFilter');
+        const sortSelect = document.getElementById('sortSelect');
+        const filterOptions = document.querySelectorAll('.filter-option');
+        const searchInput = document.querySelector('.search-input');
+        const pageBtns = document.querySelectorAll('.page-btn');
+        
+        // Theme Toggle Functionality
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+        
+        // Render books function
+        function renderBooks(booksToRender) {
+            booksGrid.innerHTML = '';
+            
+            if (booksToRender.length === 0) {
+                booksGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; font-size: 18px; color: var(--light-text);">Kitob topilmadi. Boshqa filterlarni sinab ko\'ring.</div>';
+                return;
+            }
+            
+            booksToRender.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                
+                // Determine category name
+                let categoryName = '';
+                switch(book.category) {
+                    case 'fiction': categoryName = 'Badiiy'; break;
+                    case 'science': categoryName = 'Ilmiy'; break;
+                    case 'history': categoryName = 'Tarix'; break;
+                    case 'biography': categoryName = 'Tarjimai hol'; break;
+                    case 'technology': categoryName = 'Texnologiya'; break;
+                    case 'children': categoryName = 'Bolalar'; break;
+                    default: categoryName = 'Boshqa';
+                }
+                
+                // Determine language name
+                let languageName = '';
+                switch(book.language) {
+                    case 'uzbek': languageName = 'O\'zbekcha'; break;
+                    case 'russian': languageName = 'Ruscha'; break;
+                    case 'english': languageName = 'Inglizcha'; break;
+                    default: languageName = 'Boshqa';
+                }
+                
+                bookCard.innerHTML = `
+                    <div class="book-image">
+                        <i class="fas fa-book"></i>
+                        <div class="book-category">${categoryName}</div>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">${book.title}</h3>
+                        <span class="book-author">${book.author}</span>
+                        <p class="book-description">${book.description}</p>
+                        <div class="book-footer">
+                            <span class="book-year">${book.year} yil • ${languageName}</span>
+                            <span class="book-status ${book.status}">${book.status === 'available' ? 'Mavjud' : 'Ijarada'}</span>
+                        </div>
+                    </div>
+                `;
+                
+                booksGrid.appendChild(bookCard);
+            });
+        }
+        
+        // Initial render
+        renderBooks(books);
+        
+        // Filter functionality
+        function filterBooks() {
+            const category = categoryFilter.value;
+            const author = authorFilter.value.toLowerCase();
+            const search = searchInput.value.toLowerCase();
+            
+            // Get active status filter
+            let statusFilter = 'all';
+            document.querySelectorAll('.filter-option[data-status]').forEach(option => {
+                if (option.classList.contains('active')) {
+                    statusFilter = option.getAttribute('data-status');
+                }
+            });
+            
+            // Get active year filter
+            let yearFilter = 'all';
+            document.querySelectorAll('.filter-option[data-year]').forEach(option => {
+                if (option.classList.contains('active')) {
+                    yearFilter = option.getAttribute('data-year');
+                }
+            });
+            
+            // Get active language filter
+            let languageFilter = 'all';
+            document.querySelectorAll('.filter-option[data-language]').forEach(option => {
+                if (option.classList.contains('active')) {
+                    languageFilter = option.getAttribute('data-language');
+                }
+            });
+            
+            // Apply filters
+            let filteredBooks = books.filter(book => {
+                // Category filter
+                if (category !== 'all' && book.category !== category) return false;
+                
+                // Author filter
+                if (author && !book.author.toLowerCase().includes(author)) return false;
+                
+                // Search filter
+                if (search && 
+                    !book.title.toLowerCase().includes(search) && 
+                    !book.author.toLowerCase().includes(search) && 
+                    !book.description.toLowerCase().includes(search)) return false;
+                
+                // Status filter
+                if (statusFilter !== 'all' && book.status !== statusFilter) return false;
+                
+                // Year filter
+                if (yearFilter !== 'all') {
+                    if (yearFilter === '2020-2024' && (book.year < 2020 || book.year > 2024)) return false;
+                    if (yearFilter === '2010-2019' && (book.year < 2010 || book.year > 2019)) return false;
+                    if (yearFilter === '2000-2009' && (book.year < 2000 || book.year > 2009)) return false;
+                    if (yearFilter === 'before2000' && book.year >= 2000) return false;
+                }
+                
+                // Language filter
+                if (languageFilter !== 'all' && book.language !== languageFilter) return false;
+                
+                return true;
+            });
+            
+            // Apply sorting
+            const sortValue = sortSelect.value;
+            filteredBooks.sort((a, b) => {
+                switch(sortValue) {
+                    case 'title':
+                        return a.title.localeCompare(b.title);
+                    case 'author':
+                        return a.author.localeCompare(b.author);
+                    case 'year':
+                        return b.year - a.year;
+                    case 'popular':
+                        // Simulated popularity based on ID (for demo)
+                        return b.id - a.id;
+                    case 'newest':
+                    default:
+                        return b.id - a.id;
+                }
+            });
+            
+            renderBooks(filteredBooks);
+        }
+        
+        // Event listeners for filters
+        categoryFilter.addEventListener('change', filterBooks);
+        authorFilter.addEventListener('input', filterBooks);
+        searchInput.addEventListener('input', filterBooks);
+        sortSelect.addEventListener('change', filterBooks);
+        
+        // Filter options click handlers
+        filterOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-status') ? 'status' : 
+                                   this.getAttribute('data-year') ? 'year' : 
+                                   this.getAttribute('data-language') ? 'language' : null;
+                
+                if (filterType) {
+                    // Remove active class from siblings
+                    this.parentElement.querySelectorAll('.filter-option').forEach(sibling => {
+                        sibling.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // Apply filter
+                    filterBooks();
+                }
+            });
+        });
+        
+        // Pagination click handlers
+        pageBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.querySelector('i')) return; // Skip arrow buttons for now
+                
+                // Remove active class from all page buttons
+                document.querySelectorAll('.page-btn').forEach(pageBtn => {
+                    pageBtn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // In a real app, this would load the corresponding page of results
+                // For demo, we'll just scroll to top
+                window.scrollTo({
+                    top: document.querySelector('.content-header').offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animate stats counter
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            let currentValue = 0;
+            const increment = targetValue / 100;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    element.textContent = targetValue.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(currentValue).toLocaleString();
+                }
+            }, 20);
+        }
+        
+        // Initialize stats counters
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                animateCounter('totalBooks', 50247);
+                animateCounter('availableBooks', 42156);
+                animateCounter('digitalBooks', 18932);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

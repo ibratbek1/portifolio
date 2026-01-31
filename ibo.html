@@ -393,6 +393,7 @@
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp var(--animate-speed) forwards;
+            cursor: pointer;
         }
         
         .book-card:hover {
@@ -465,7 +466,6 @@
             margin-bottom: 15px;
             line-height: 1.5;
             display: -webkit-box;
-            --line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -498,6 +498,112 @@
         .borrowed {
             background-color: rgba(231, 76, 60, 0.2);
             color: #c0392b;
+        }
+        
+        /* PDF Modal Styles */
+        .pdf-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .pdf-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .pdf-modal-content {
+            width: 90%;
+            height: 90%;
+            background-color: var(--light-card);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .pdf-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: 1px solid var(--light-border);
+        }
+        
+        .pdf-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .pdf-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .pdf-modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .pdf-modal-body {
+            flex: 1;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .pdf-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+            background-color: var(--light-bg);
+        }
+        
+        .pdf-placeholder-icon {
+            font-size: 80px;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        .pdf-placeholder-text {
+            font-size: 18px;
+            color: var(--light-text);
+            margin-bottom: 10px;
+        }
+        
+        .pdf-placeholder-subtext {
+            font-size: 14px;
+            color: var(--light-text);
+            opacity: 0.7;
         }
         
         /* Pagination */
@@ -607,6 +713,15 @@
             }
         }
         
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
         @keyframes rotate {
             from {
                 transform: rotate(0deg);
@@ -628,6 +743,11 @@
             
             .hero-title {
                 font-size: 38px;
+            }
+            
+            .pdf-modal-content {
+                width: 95%;
+                height: 85%;
             }
         }
         
@@ -657,6 +777,11 @@
             .books-grid {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
+            
+            .pdf-modal-content {
+                width: 98%;
+                height: 80%;
+            }
         }
         
         @media (max-width: 576px) {
@@ -679,6 +804,14 @@
             
             .section-title {
                 font-size: 26px;
+            }
+            
+            .pdf-modal-header {
+                padding: 12px 20px;
+            }
+            
+            .pdf-modal-title {
+                font-size: 16px;
             }
         }
         
@@ -833,6 +966,29 @@
         </main>
     </div>
     
+    <!-- PDF Modal -->
+    <div class="pdf-modal" id="pdfModal">
+        <div class="pdf-modal-content">
+            <div class="pdf-modal-header">
+                <h3 class="pdf-modal-title" id="pdfModalTitle">Kitobni ko'rish</h3>
+                <button class="pdf-modal-close" id="pdfModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="pdf-modal-body">
+                <iframe class="pdf-viewer" id="pdfViewer" frameborder="0"></iframe>
+                <div class="pdf-placeholder" id="pdfPlaceholder">
+                    <i class="fas fa-book-open pdf-placeholder-icon"></i>
+                    <div class="pdf-placeholder-text">PDF ko'ruvchi yuklanmoqda...</div>
+                    <div class="pdf-placeholder-subtext">Agar PDF yuklanmasa, pastdagi tugma orqali yuklab olishingiz mumkin</div>
+                    <button id="downloadPdfBtn" style="margin-top: 20px; padding: 10px 20px; background-color: var(--secondary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        <i class="fas fa-download" style="margin-right: 8px;"></i>PDFni yuklab olish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -888,7 +1044,7 @@
     </footer>
     
     <script>
-        // Sample book data
+        // Sample book data with PDF URLs
         const books = [
             {
                 id: 1,
@@ -898,7 +1054,9 @@
                 category: "fiction",
                 description: "O'zbek adabiyotining eng yirik asarlaridan biri. XX asr boshlarida O'zbekistonning ijtimoiy hayotini aks ettiradi.",
                 language: "uzbek",
-                status: "available"
+                status: "available",
+                pdfUrl: "https://www.example.com/pdfs/otkan-kunlar.pdf",
+                coverImage: "https://via.placeholder.com/300x400/3498db/ffffff?text=O'tkan+Kunlar"
             },
             {
                 id: 2,
@@ -908,7 +1066,9 @@
                 category: "science",
                 description: "Yaxshi odatlarni qanday shakllantirish va yomon odatlardan qanday qutulish haqida qimmatli maslahatlar.",
                 language: "english",
-                status: "available"
+                status: "available",
+                pdfUrl: "https://www.example.com/pdfs/atomic-habits.pdf",
+                coverImage: "https://via.placeholder.com/300x400/2ecc71/ffffff?text=Atomic+Habits"
             },
             {
                 id: 3,
@@ -918,7 +1078,9 @@
                 category: "science",
                 description: "Koinotning kelib chiqishi, tabiati va kelajagi haqida Stephen Hawkingning mashhur asari.",
                 language: "russian",
-                status: "borrowed"
+                status: "borrowed",
+                pdfUrl: "https://www.example.com/pdfs/brief-history-of-time.pdf",
+                coverImage: "https://via.placeholder.com/300x400/9b59b6/ffffff?text=Brief+History+of+Time"
             },
             {
                 id: 4,
@@ -928,7 +1090,9 @@
                 category: "fiction",
                 description: "Zamonaviy o'zbek adabiyotining diqqatga sazovor asari. Yosh avlodning qiyinchiliklari va orzulari haqida.",
                 language: "uzbek",
-                status: "available"
+                status: "available",
+                pdfUrl: "https://www.example.com/pdfs/sariq-dev.pdf",
+                coverImage: "https://via.placeholder.com/300x400/e74c3c/ffffff?text=Sariq+Dev"
             },
             {
                 id: 5,
@@ -938,7 +1102,9 @@
                 category: "technology",
                 description: "JavaScript dasturlash tilini chuqur o'rganish uchun eng yaxshi qo'llanmalardan biri.",
                 language: "english",
-                status: "available"
+                status: "available",
+                pdfUrl: "https://www.example.com/pdfs/javascript-guide.pdf",
+                coverImage: "https://via.placeholder.com/300x400/f39c12/ffffff?text=JavaScript+Guide"
             },
             {
                 id: 6,
@@ -948,7 +1114,9 @@
                 category: "history",
                 description: "Qadim zamonlardan hozirgi kungacha O'zbekiston tarixining to'liq yoritilishi.",
                 language: "uzbek",
-                status: "borrowed"
+                status: "borrowed",
+                pdfUrl: "https://www.example.com/pdfs/uzbekistan-history.pdf",
+                coverImage: "https://via.placeholder.com/300x400/1abc9c/ffffff?text=Uzbekistan+History"
             },
             {
                 id: 7,
@@ -958,7 +1126,9 @@
                 category: "biography",
                 description: "Apple kompaniyasining asoschisi Steve Jobsning hayoti va faoliyati haqida hikoya.",
                 language: "russian",
-                status: "available"
+                status: "available",
+                pdfUrl: "https://www.example.com/pdfs/steve-jobs.pdf",
+                coverImage: "https://via.placeholder.com/300x400/34495e/ffffff?text=Steve+Jobs"
             },
             {
                 id: 8,
@@ -968,7 +1138,9 @@
                 category: "fiction",
                 description: "O'zbek xalqining qadimiy dostonlaridan biri. Qahramonlik va vatanparvarlik ruhida yozilgan.",
                 language: "uzbek",
-                status: "available"
+                status: "available",
+                pdfUrl: "https://www.example.com/pdfs/alpomish.pdf",
+                coverImage: "https://via.placeholder.com/300x400/d35400/ffffff?text=Alpomish"
             },
             {
                 id: 9,
@@ -978,7 +1150,9 @@
                 category: "science",
                 description: "Insoniyatning qisqa tarixi. Odam turinging paydo bo'lishidan hozirgi kungacha bo'lgan yo'li.",
                 language: "english",
-                status: "borrowed"
+                status: "borrowed",
+                pdfUrl: "https://www.example.com/pdfs/sapiens.pdf",
+                coverImage: "https://via.placeholder.com/300x400/27ae60/ffffff?text=Sapiens"
             },
             {
                 id: 10,
@@ -988,7 +1162,9 @@
                 category: "fiction",
                 description: "Tanlangan hikoyalar to'plami. Hayotning turli jabhalarini yorqin tasvirlar bilan aks ettiradi.",
                 language: "uzbek",
-                status: "available"
+                status: "available",
+                pdfUrl: "https://www.example.com/pdfs/daftar-hoshiya.pdf",
+                coverImage: "https://via.placeholder.com/300x400/8e44ad/ffffff?text=Daftar+Hoshiya"
             },
             {
                 id: 11,
@@ -998,7 +1174,9 @@
                 category: "technology",
                 description: "Python yordamida ma'lumotlarni tahlil qilish va vizualizatsiya qilish bo'yicha qo'llanma.",
                 language: "english",
-                status: "available"
+                status: "available",
+                pdfUrl: "https://www.example.com/pdfs/python-data-analysis.pdf",
+                coverImage: "https://via.placeholder.com/300x400/16a085/ffffff?text=Python+Data+Analysis"
             },
             {
                 id: 12,
@@ -1008,7 +1186,9 @@
                 category: "biography",
                 description: "Buyuk o'zbek shoiri va mutafakkiri Alisher Navoiy hayoti va ijodi haqida roman.",
                 language: "uzbek",
-                status: "borrowed"
+                status: "borrowed",
+                pdfUrl: "https://www.example.com/pdfs/navoiy.pdf",
+                coverImage: "https://via.placeholder.com/300x400/c0392b/ffffff?text=Navoiy"
             }
         ];
 
@@ -1022,6 +1202,17 @@
         const filterOptions = document.querySelectorAll('.filter-option');
         const searchInput = document.querySelector('.search-input');
         const pageBtns = document.querySelectorAll('.page-btn');
+        
+        // PDF Modal Elements
+        const pdfModal = document.getElementById('pdfModal');
+        const pdfModalTitle = document.getElementById('pdfModalTitle');
+        const pdfViewer = document.getElementById('pdfViewer');
+        const pdfPlaceholder = document.getElementById('pdfPlaceholder');
+        const pdfModalClose = document.getElementById('pdfModalClose');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        
+        // Current book for PDF viewing
+        let currentBook = null;
         
         // Theme Toggle Functionality
         themeToggle.addEventListener('click', () => {
@@ -1048,6 +1239,7 @@
             booksToRender.forEach(book => {
                 const bookCard = document.createElement('div');
                 bookCard.className = 'book-card';
+                bookCard.dataset.id = book.id;
                 
                 // Determine category name
                 let categoryName = '';
@@ -1086,9 +1278,79 @@
                     </div>
                 `;
                 
+                // Add click event to open PDF
+                bookCard.addEventListener('click', () => {
+                    openPdfViewer(book);
+                });
+                
                 booksGrid.appendChild(bookCard);
             });
         }
+        
+        // Open PDF viewer modal
+        function openPdfViewer(book) {
+            currentBook = book;
+            pdfModalTitle.textContent = `${book.title} - ${book.author}`;
+            pdfModal.classList.add('active');
+            
+            // Show placeholder while loading
+            pdfPlaceholder.style.display = 'flex';
+            pdfViewer.style.display = 'none';
+            
+            // Set PDF source after a short delay (simulating loading)
+            setTimeout(() => {
+                // In a real application, this would be the actual PDF URL
+                // For demo purposes, we're using a sample PDF URL
+                pdfViewer.src = book.pdfUrl;
+                
+                // Simulate PDF loading
+                setTimeout(() => {
+                    pdfPlaceholder.style.display = 'none';
+                    pdfViewer.style.display = 'block';
+                }, 1500);
+            }, 500);
+            
+            // Update download button
+            downloadPdfBtn.onclick = () => {
+                // Create a temporary link to download the PDF
+                const link = document.createElement('a');
+                link.href = book.pdfUrl;
+                link.download = `${book.title.replace(/\s+/g, '_')}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+            
+            // Prevent body scrolling when modal is open
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Close PDF viewer modal
+        function closePdfViewer() {
+            pdfModal.classList.remove('active');
+            pdfViewer.src = '';
+            currentBook = null;
+            
+            // Restore body scrolling
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Event listener for closing the modal
+        pdfModalClose.addEventListener('click', closePdfViewer);
+        
+        // Close modal when clicking outside the content
+        pdfModal.addEventListener('click', (e) => {
+            if (e.target === pdfModal) {
+                closePdfViewer();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && pdfModal.classList.contains('active')) {
+                closePdfViewer();
+            }
+        });
         
         // Initial render
         renderBooks(books);

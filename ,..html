@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="uz" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maktab Yangiliklari Portalı</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.2s, transform 0.3s;
+        }
+
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #8338ec;
+            --accent-color: #ff006e;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --light-text: #333333;
+            --light-muted: #6c757d;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-text: #f8f9fa;
+            --dark-muted: #adb5bd;
+            --success-color: #06d6a0;
+            --warning-color: #ffd166;
+            --danger-color: #ef476f;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+        }
+
+        .dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header styles */
+        header {
+            padding: 20px 0;
+            background-color: var(--light-card);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .dark-mode header {
+            background-color: var(--dark-card);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .nav-link {
+            color: var(--dark-text);
+        }
+
+        .nav-link:hover {
+            background-color: rgba(58, 134, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-text);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(58, 134, 255, 0.1);
+        }
+
+        .dark-mode .theme-toggle {
+            color: var(--dark-text);
+            background-color: rgba(58, 134, 255, 0.2);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+            background-color: rgba(58, 134, 255, 0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+
+        .dark-mode .mobile-menu-btn {
+            color: var(--dark-text);
+        }
+
+        /* Hero section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(58, 134, 255, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+            z-index: -1;
+        }
+
+        .dark-mode .hero::before {
+            background: radial-gradient(circle, rgba(58, 134, 255, 0.05) 0%, rgba(18, 18, 18, 0) 70%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: var(--light-muted);
+        }
+
+        .dark-mode .hero p {
+            color: var(--dark-muted);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            padding: 20px;
+            border-radius: var(--radius);
+            background-color: var(--light-card);
+            box-shadow: var(--shadow);
+            min-width: 150px;
+            transform: translateY(0);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .dark-mode .stat-item {
+            background-color: var(--dark-card);
+        }
+
+        .stat-item:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .stat-item:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: var(--light-muted);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .dark-mode .stat-label {
+            color: var(--dark-muted);
+        }
+
+        /* News section */
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        .news-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .news-card {
+            background-color: var(--light-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transform: translateY(0);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .dark-mode .news-card {
+            background-color: var(--dark-card);
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .news-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .news-card:hover .news-image {
+            transform: scale(1.05);
+        }
+
+        .news-content {
+            padding: 20px;
+        }
+
+        .news-category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .category-sport {
+            background-color: rgba(6, 214, 160, 0.2);
+            color: var(--success-color);
+        }
+
+        .category-science {
+            background-color: rgba(58, 134, 255, 0.2);
+            color: var(--primary-color);
+        }
+
+        .category-culture {
+            background-color: rgba(255, 209, 102, 0.2);
+            color: #e6b400;
+        }
+
+        .category-event {
+            background-color: rgba(239, 71, 111, 0.2);
+            color: var(--danger-color);
+        }
+
+        .news-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--light-text);
+        }
+
+        .dark-mode .news-title {
+            color: var(--dark-text);
+        }
+
+        .news-excerpt {
+            color: var(--light-muted);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .dark-mode .news-excerpt {
+            color: var(--dark-muted);
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--light-muted);
+            margin-top: 15px;
+        }
+
+        .dark-mode .news-meta {
+            color: var(--dark-muted);
+        }
+
+        /* Events section */
+        .events-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .event-card {
+            display: flex;
+            background-color: var(--light-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .dark-mode .event-card {
+            background-color: var(--dark-card);
+        }
+
+        .event-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            min-width: 100px;
+        }
+
+        .event-day {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .event-month {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .event-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .event-title {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--light-text);
+        }
+
+        .dark-mode .event-title {
+            color: var(--dark-text);
+        }
+
+        .event-time {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--light-card);
+            padding: 50px 0 20px;
+            margin-top: 80px;
+        }
+
+        .dark-mode footer {
+            background-color: var(--dark-card);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--light-muted);
+        }
+
+        .dark-mode .footer-links a {
+            color: var(--dark-muted);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--light-muted);
+            font-size: 0.9rem;
+        }
+
+        .dark-mode .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--dark-muted);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .news-container {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--light-card);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 0 0 var(--radius) var(--radius);
+            }
+
+            .dark-mode .nav-links {
+                background-color: var(--dark-card);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .stats {
+                gap: 20px;
+            }
+
+            .stat-item {
+                min-width: 120px;
+            }
+
+            .event-card {
+                flex-direction: column;
+            }
+
+            .event-date {
+                flex-direction: row;
+                justify-content: space-around;
+                min-height: 70px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .news-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-school"></i>
+                </div>
+                <span>Maktab Portal</span>
+            </div>
+            
+            <nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="nav-links" id="navLinks">
+                    <a href="#" class="nav-link active"><i class="fas fa-home"></i> Bosh sahifa</a>
+                    <a href="#" class="nav-link"><i class="fas fa-newspaper"></i> Yangiliklar</a>
+                    <a href="#" class="nav-link"><i class="fas fa-calendar-alt"></i> Tadbirlar</a>
+                    <a href="#" class="nav-link"><i class="fas fa-users"></i> O'qituvchilar</a>
+                    <a href="#" class="nav-link"><i class="fas fa-graduation-cap"></i> O'quvchilar</a>
+                    <a href="#" class="nav-link"><i class="fas fa-phone-alt"></i> Aloqa</a>
+                </div>
+            </nav>
+            
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Maktab Yangiliklari Portaliga Xush Kelibsiz!</h1>
+            <p>Bu yerda maktabimizdagi eng so'nggi yangiliklar, tadbirlar va e'lonlarni topasiz. Doimiy yangilanib turamiz!</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="newsCount">24</div>
+                    <div class="stat-label">Yangi yangiliklar</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="eventsCount">7</div>
+                    <div class="stat-label">Yaqin tadbirlar</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="activeUsers">142</div>
+                    <div class="stat-label">Faol foydalanuvchilar</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- News Section -->
+        <section class="news-section">
+            <h2 class="section-title">So'nggi Yangiliklar</h2>
+            <div class="news-container" id="newsContainer">
+                <!-- News cards will be dynamically generated -->
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section class="events-section">
+            <h2 class="section-title">Yaqin Tadbirlar</h2>
+            <div class="events-container" id="eventsContainer">
+                <!-- Event cards will be dynamically generated -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Maktab Portal</h3>
+                    <p>Maktabimizdagi eng so'nggi yangiliklar va e'lonlar uchun asosiy manba. O'quvchilar, ota-onalar va o'qituvchilar uchun.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Tez Havolalar</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Bosh sahifa</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Yangiliklar arxivi</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Dars jadvali</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> O'qituvchilar</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Aloqa</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> Toshkent shahar, Yunusobod tumani</li>
+                        <li><i class="fas fa-phone"></i> +998 71 123 45 67</li>
+                        <li><i class="fas fa-envelope"></i> info@maktabportal.uz</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Maktab Yangiliklari Portalı. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // News data
+        const newsData = [
+            {
+                id: 1,
+                title: "Maktabimizda yangi kompyuter sinfi ochildi",
+                excerpt: "Yangi kompyuter sinfida zamonaviy texnologiyalar bilan ta'minlangan 25 ta kompyuter o'rnatildi...",
+                category: "Science",
+                date: "15 Oktyabr, 2023",
+                image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 2,
+                title: "Basketbol bo'yicha maktablararo musobaqada g'alaba",
+                excerpt: "Basketbol jamoamiz shahar chempionatida birinchi o'rinni egalladi. O'yinchilarimizni qalbidan tabriklaymiz!",
+                category: "Sport",
+                date: "12 Oktyabr, 2023",
+                image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 3,
+                title: "Maktabimizda 'Kitob do'stlari' klubi ish boshladi",
+                excerpt: "Har hafta o'tkaziladigan klubdan barcha o'quvchilar foydalanishlari mumkin. Dastlabki yig'ilish 20 oktyabrda bo'lib o'tadi.",
+                category: "Culture",
+                date: "10 Oktyabr, 2023",
+                image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 4,
+                title: "Ona tili fanidan olimpiada g'oliblari aniqlandi",
+                excerpt: "Ona tili fanidan o'tkazilgan shahar olimpiadasida 3 ta o'quvchimiz birinchi o'rinlarni qo'lga kiritdi.",
+                category: "Science",
+                date: "8 Oktyabr, 2023",
+                image: "https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 5,
+                title: "Yangi o'quv yili uchun tayyorgarlik",
+                excerpt: "Maktabimiz yangi o'quv yiliga tayyorgarlik ko'rish bo'yicha keng ko'lamli ishlarni amalga oshirmoqda...",
+                category: "Event",
+                date: "5 Oktyabr, 2023",
+                image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 6,
+                title: "O'qituvchilar kunini nishonlash",
+                excerpt: "1 oktyabr kuni maktabimizda O'qituvchilar kuni munosabati bilan tantanali marosim o'tkazildi.",
+                category: "Event",
+                date: "2 Oktyabr, 2023",
+                image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            }
+        ];
+        
+        // Events data
+        const eventsData = [
+            {
+                id: 1,
+                title: "Matematika olimpiadasi",
+                date: "25 Oktyabr, 2023",
+                time: "10:00 - 13:00",
+                location: "Maktab 302-xona"
+            },
+            {
+                id: 2,
+                title: "Ota-onalar yig'ilishi",
+                date: "28 Oktyabr, 2023",
+                time: "15:00 - 17:00",
+                location: "Maktab akt zal"
+            },
+            {
+                id: 3,
+                title: "Maktab teatri spektakli",
+                date: "2 Noyabr, 2023",
+                time: "18:00 - 20:00",
+                location: "Maktab madaniyat markazi"
+            },
+            {
+                id: 4,
+                title: "Fizika fanidan seminar",
+                date: "5 Noyabr, 2023",
+                time: "14:00 - 16:00",
+                location: "Maktab fizika laboratoriyasi"
+            },
+            {
+                id: 5,
+                title: "Sport kuni",
+                date: "10 Noyabr, 2023",
+                time: "09:00 - 15:00",
+                location: "Maktab sport maydoni"
+            }
+        ];
+        
+        // Generate news cards
+        const newsContainer = document.getElementById('newsContainer');
+        
+        newsData.forEach(news => {
+            const newsCard = document.createElement('div');
+            newsCard.className = 'news-card';
+            newsCard.innerHTML = `
+                <img src="${news.image}" alt="${news.title}" class="news-image">
+                <div class="news-content">
+                    <span class="news-category category-${news.category.toLowerCase()}">${news.category}</span>
+                    <h3 class="news-title">${news.title}</h3>
+                    <p class="news-excerpt">${news.excerpt}</p>
+                    <div class="news-meta">
+                        <span><i class="far fa-calendar"></i> ${news.date}</span>
+                        <a href="#">Batafsil <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            `;
+            newsContainer.appendChild(newsCard);
+        });
+        
+        // Generate event cards
+        const eventsContainer = document.getElementById('eventsContainer');
+        
+        eventsData.forEach(event => {
+            const eventDate = new Date(event.date);
+            const day = eventDate.getDate();
+            const month = eventDate.toLocaleString('uz-UZ', { month: 'long' });
+            
+            const eventCard = document.createElement('div');
+            eventCard.className = 'event-card';
+            eventCard.innerHTML = `
+                <div class="event-date">
+                    <div class="event-day">${day}</div>
+                    <div class="event-month">${month}</div>
+                </div>
+                <div class="event-content">
+                    <h3 class="event-title">${event.title}</h3>
+                    <div class="event-time">
+                        <i class="far fa-clock"></i> ${event.time}
+                    </div>
+                    <p><i class="fas fa-map-marker-alt"></i> ${event.location}</p>
+                </div>
+            `;
+            eventsContainer.appendChild(eventCard);
+        });
+        
+        // Animated counter for stats
+        function animateCounter(elementId, targetValue, duration = 2000) {
+            const element = document.getElementById(elementId);
+            let startValue = 0;
+            const increment = targetValue / (duration / 16); // 60fps
+            
+            const updateCounter = () => {
+                startValue += increment;
+                if (startValue < targetValue) {
+                    element.textContent = Math.floor(startValue);
+                    setTimeout(updateCounter, 16);
+                } else {
+                    element.textContent = targetValue;
+                }
+            };
+            
+            updateCounter();
+        }
+        
+        // Initialize counters when page loads
+        window.addEventListener('load', () => {
+            animateCounter('newsCount', 24);
+            animateCounter('eventsCount', 7);
+            animateCounter('activeUsers', 142);
+        });
+        
+        // Add hover effect to news cards
+        const newsCards = document.querySelectorAll('.news-card');
+        newsCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
